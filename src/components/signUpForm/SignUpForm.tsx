@@ -13,13 +13,8 @@ interface SignUpProps {
     email: string;
     password: string;
     confirmPassword: string;
+    setIsLogin: (isLogin: boolean) => void;
 }
-
-const signUpForm = {
-    email: "",
-    password: "",
-    confirmPassword: "",
-};
 
 interface InputFormProps {
     label: string;
@@ -29,6 +24,12 @@ interface InputFormProps {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
     error?: boolean;
 }
+
+const signUpForm = {
+    email: "",
+    password: "",
+    confirmPassword: "",
+};
 
 const InputForm: React.FC<InputFormProps> = ({
     label,
@@ -50,10 +51,9 @@ const InputForm: React.FC<InputFormProps> = ({
         />
     );
 };
-// @ts-ignore
 
-const SignUpForm: React.FC = ({ setIsLogin }) => {
-    const [signUp, setSignUp] = useState<SignUpProps>(signUpForm);
+const SignUpForm: React.FC<SignUpProps> = ({ setIsLogin }) => {
+    const [signUp, setSignUp] = useState(signUpForm);
 
     // const [error, setError] = useState<Record<string, string>>();
     const [error, setError] = useState<{
@@ -70,12 +70,6 @@ const SignUpForm: React.FC = ({ setIsLogin }) => {
     };
 
     const validate = () => {
-        // if (!/\S+@\S+\.\S+/.test(signUp.email)) {
-        //     return true;
-        // } else if (signUp.password !== signUp.confirmPassword) {
-        //     return true;
-        // }
-        // return false;
         const newError: {
             email?: string;
             password?: string;
@@ -91,23 +85,6 @@ const SignUpForm: React.FC = ({ setIsLogin }) => {
     };
 
     const handleSumbit = () => {
-        // const validationError = validate();
-        // if (Object.keys(validationError)) {
-        //     console.log("error");
-        //     setError(validationError);
-        // } else {
-        //     setIsSubmit(false);
-        //     setSignUp({
-        //         email: "",
-        //         password: "",
-        //         confirmPassword: "",
-        //     });
-        //     setTimeout(() => {
-        //         setIsLogin(true);
-        //     }, 2000);
-        //     console.log("success");
-        // }
-
         const validationError = validate();
         if (Object.keys(validationError).length > 0) {
             setError(validationError);

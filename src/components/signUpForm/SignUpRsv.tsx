@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Card,
     CardHeader,
@@ -8,29 +8,42 @@ import {
     Input,
     Button,
 } from "@material-tailwind/react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-type Inputs = {
-    email: string;
-    password: string;
-    confirmPassword: string;
-};
+interface SignUpProps {
+    setIsLogin: (isLogin: boolean) => void;
+}
 
-const SignUpReactHookForm: React.FC = ({ setIsLogin }) => {
+const schema = yup
+    .object({
+        email: yup.string().email().required(),
+        password: yup.string().min(6).required(),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup.ref("password")], "Passwords must match")
+            .required(),
+    })
+    .required();
+
+const SignUpRsv: React.FC<SignUpProps> = ({ setIsLogin }) => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<Inputs>();
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const onSubmit = (data: unknown) => {
         console.log(data);
         setIsLogin(true);
     };
 
     return (
         <>
-            <h1>HI</h1>
+            <h1>Schema Validation</h1>
             <div className="flex justify-center">
                 <Card className="w-96">
                     <CardHeader
@@ -49,12 +62,9 @@ const SignUpReactHookForm: React.FC = ({ setIsLogin }) => {
                             type="email"
                             {...register("email", { required: true })}
                         />
-                        {errors.email && (
-                            <span className="text-red-900">
-                                This field is required
-                            </span>
-                        )}
-
+                        <p className="text-orange-900">
+                            {errors.email?.message}
+                        </p>
                         <Input
                             label="Password"
                             size="lg"
@@ -63,28 +73,30 @@ const SignUpReactHookForm: React.FC = ({ setIsLogin }) => {
                                 required: true,
                             })}
                         />
-                        {errors.password && (
-                            <span className="text-red-900">
-                                This field is required
-                            </span>
-                        )}
+
+                        <p className="text-orange-900">
+                            {errors.password?.message}
+                        </p>
+
                         <Input
                             label="Confirm Password"
                             size="lg"
                             type="password"
-                            {...register("confirmPassword", { required: true })}
+                            {...register("confirmPassword", {
+                                required: true,
+                            })}
                         />
-                        {errors.confirmPassword && (
-                            <span className="text-red-900">
-                                This field is required
-                            </span>
-                        )}
+                        <p className="text-orange-900">
+                            {errors.confirmPassword?.message}
+                        </p>
                     </CardBody>
                     <CardFooter className="pt-0">
                         <Button
+                            onClick={handleSubmit(onSubmit)}
                             variant="gradient"
                             fullWidth
-                            onClick={handleSubmit(onSubmit)}
+                            type="submit"
+                            typeof="submit"
                         >
                             Sign Up
                         </Button>
@@ -110,4 +122,4 @@ const SignUpReactHookForm: React.FC = ({ setIsLogin }) => {
     );
 };
 
-export default SignUpReactHookForm;
+export default SignUpRsv;

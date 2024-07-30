@@ -1,12 +1,12 @@
-import {useState} from "react";
+import { useState } from "react";
 import React from "react";
 import TodoForm from "./components/todoForm/TodoForm.tsx";
 import TodoLists from "./components/todoForm/TodoLists.tsx";
-import {dataTodos} from "./components/data/data.ts";
-import {produce} from "immer";
+import { dataTodos } from "./components/data/data.ts";
+import { produce } from "immer";
 import SignUpForm from "./components/signUpForm/SignUpForm.tsx";
-
 import SignUpReactHookForm from "./components/signUpForm/SignUpReactHookForm.tsx";
+import SignUpRsv from "./components/signUpForm/SignUpRsv.tsx";
 
 interface Todo {
     id: number;
@@ -17,7 +17,7 @@ interface Todo {
 }
 
 const App: React.FC = () => {
-// @ts-ignore
+    // @ts-ignore
     const [todos, setTodos] = useState<Todo[]>(dataTodos);
     const [editTodo, setEditTodo] = useState<Todo | null>(null);
 
@@ -25,9 +25,8 @@ const App: React.FC = () => {
 
     // toDoList
     const addTodo = (title: string) => {
-        const newTodo = {id: Date.now(), title, completed: false};
+        const newTodo = { id: Date.now(), title, completed: false };
         const nextTodo = produce(todos, (draft) => {
-
             // @ts-ignore
             draft.push(newTodo);
         });
@@ -42,7 +41,7 @@ const App: React.FC = () => {
         setTodos(
             todos.map((todo) => {
                 if (todo.id === id) {
-                    return {...todo, completed: !todo.completed};
+                    return { ...todo, completed: !todo.completed };
                 }
                 return todo;
             })
@@ -59,7 +58,7 @@ const App: React.FC = () => {
     const updateTodo = (id: number, newText: string) => {
         setTodos(
             todos.map((todo) =>
-                todo.id === id ? {...todo, title: newText} : todo
+                todo.id === id ? { ...todo, title: newText } : todo
             )
         );
         setEditTodo(null);
@@ -90,8 +89,9 @@ const App: React.FC = () => {
                 </div>
             ) : (
                 // @ts-ignore
-                // <SignUpForm setIsLogin={setIsLogin}/>
-                <SignUpReactHookForm setIsLogin={setIsLogin}/>
+                // <SignUpForm setIsLogin={setIsLogin} />
+                // <SignUpReactHookForm setIsLogin={setIsLogin} />
+                <SignUpRsv setIsLogin={setIsLogin} />
             )}
         </>
     );
