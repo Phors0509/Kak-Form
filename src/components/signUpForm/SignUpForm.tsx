@@ -99,11 +99,6 @@ const SignUpForm: React.FC<SignUpProps> = ({ setIsLogin }) => {
 
     return (
         <>
-            {/* {isSumit ? (
-                <h1>Jol</h1>
-            ) : (
-                
-            )} */}
             <div className="flex justify-center">
                 <Card className="w-96" color="transparent" shadow={true}>
                     <CardHeader
@@ -178,5 +173,4 @@ const SignUpForm: React.FC<SignUpProps> = ({ setIsLogin }) => {
         </>
     );
 };
-
 export default SignUpForm;
